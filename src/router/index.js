@@ -31,4 +31,19 @@ const routes = [
       return import(/* webpackChunkName: "about" */ '../views/Cart.vue')
     }
   },
+
+  {
+    path: '/order',
+    name: 'order',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Orders.vue')
+    }
+  },
 ]  
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
