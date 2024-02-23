@@ -23,4 +23,12 @@ const routes = [
       return import(/* webpackChunkName: "about" */ '../views/Reg.vue')
     }
   },
+
+  {
+    path: '/cart',
+    name: 'cart',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Cart.vue')
+    }
+  },
 ]  
