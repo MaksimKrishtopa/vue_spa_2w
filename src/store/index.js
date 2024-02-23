@@ -33,6 +33,7 @@ export default createStore({
       else{
         state.realCart.push(item);
       }
+      localStorage.setItem('cart', JSON.stringify(state.realCart));
     },
     removeFromCart(state, product){
       if(state.realCart.length > 0){
@@ -46,10 +47,12 @@ export default createStore({
         }
 
       }
+      localStorage.setItem('cart', JSON.stringify(state.realCart));
     },
     delFromCart(state, product){
       let indexCart = state.realCart.indexOf(product);
       state.realCart.splice(indexCart, 1);
+      localStorage.setItem('cart', JSON.stringify(state.realCart));
     },
     orderCreate(state) {
       let newOrders = state.realCart.map((item) => ({ ...item }));
@@ -59,6 +62,7 @@ export default createStore({
 
       
       router.push({ name: "order" });
+      localStorage.setItem('orders', JSON.stringify(state.orders));
     },
     async fetchProducts(state) {
       try {

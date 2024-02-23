@@ -61,6 +61,16 @@ export default {
       }
     },
   },
+
+  mounted() {
+  if (localStorage.getItem('cart')) {
+    this.$store.state.realCart = JSON.parse(localStorage.getItem('cart'));
+  }
+
+  if (localStorage.getItem('orders')) {
+    this.$store.state.orders = JSON.parse(localStorage.getItem('orders'));
+  }
+}
 };
 </script>
   
