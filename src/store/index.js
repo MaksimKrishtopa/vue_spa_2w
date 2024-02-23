@@ -3,14 +3,16 @@ import axios from "axios";
 import { router } from "@/router";
 export default createStore({
   state: {
-    products: [],
+    products: {
+      data: [],
+    },
     realCart: [],
     orders: [],
-    fio: '',
-    email: '',
-    password: '',
+    fio: "",
+    email: "",
+    password: "",
     user_token: null,
-    user_auth: false
+    user_auth: false,
   },
   getters: {
   },
@@ -58,13 +60,19 @@ export default createStore({
       
       router.push({ name: "order" });
     },
-    async fetchProducts(state){
-      const {data} = await axios.get('https://jurapro.bhuser.ru/api-shop/products')
-          .then(response => state.products = response.data)
-          .catch(error =>{console.log(error)})
-      state.products = data;
-
-      
+    async fetchProducts(state) {
+      try {
+        const response = await axios.get('https://jurapro.bhuser.ru/api-shop/products');
+        
+        if (response && response.data) {
+          state.products = response.data;
+          console.log('Fetched products:', state.products);
+        } else {
+          console.error('Failed to fetch products from the server.');
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
     },
     async login(state){
 

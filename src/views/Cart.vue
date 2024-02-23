@@ -9,7 +9,7 @@
         <h2 class="msg"> Пусто! </h2>
       </div>
       <div class="items-list">
-      <div class="item" v-for="(item, index) in store.state.realCart" :key="item.id">
+      <div class="item" v-for="(item, index) in paginatedCart" :key="item.id">
         <p>Название: {{ item.name }}</p>
         <p>Описание: {{ item.description }}</p>
         <p>Цена: {{ item.price }}</p>
@@ -21,20 +21,48 @@
         <button class="deleteButton" @click="store.commit('delFromCart', item)">Удалить товар</button>
       </div>
       </div>
+    <div class="pagination">
+      <button @click="changePage('prev')" :disabled="currentPage === 1">Предыдущая</button>
+      <span>{{ currentPage }} из {{ totalPages }}</span>
+      <button @click="changePage('next')" :disabled="currentPage === totalPages">Следующая</button>
+    </div>
     </div>
   </template>
   
-  <script>
-  import store from "@/store";
+<script>
+import store from "@/store";
 
-  export default {
-    computed: {
-      store() {
-        return store;
+export default {
+  computed: {
+    store() {
+      return store;
+    },
+    paginatedCart() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.store.state.realCart.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.store.state.realCart.length / this.itemsPerPage);
+    },
+  },
+  data() {
+    return {
+      currentPage: 1,
+      itemsPerPage: 12,
+    };
+  },
+  methods: {
+    changePage(action) {
+      if (action === 'prev' && this.currentPage > 1) {
+        this.currentPage--;
+      } else if (action === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
       }
     },
-  }
-  </script>
+  },
+};
+</script>
   
   <style scoped>
 
@@ -194,5 +222,29 @@ input[type=submit]:hover {
 
 .prevPage:hover {
   background-color: rgb(50, 83, 145);
+}
+
+.pagination {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.pagination span{
+  color: #252525;
+}
+
+.pagination button {
+    cursor: pointer;
+    border: none;
+    background-color: rgb(79, 123, 206);
+    color: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    font-weight: 600;
+    box-shadow: 3px 3px 3px 1px #d1d1d1;
 }
   </style>

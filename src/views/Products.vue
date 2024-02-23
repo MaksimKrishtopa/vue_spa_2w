@@ -23,36 +23,74 @@
       </nav>
 
 
-      <div class="product-list">
-        <div class="product" v-for="(product, index) in store.state.products" :key="product.id">
-          <h3>{{ product.name }}</h3>
-          <p>{{ product.description }}</p>
-          <p>Цена: {{ product.price }}</p>
-          <button @click="store.commit('addToCart', product)" v-show="store.state.user_token !== null"><img class="add-to-cart__img" src="../assets/корзина.svg" alt="Cart">В корзину</button>
-        </div>
+    <div class="product-list">
+      <div class="product" v-for="(product, index) in displayedProducts" :key="product.id">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Цена: {{ product.price }}</p>
+        <button @click="store.commit('addToCart', product)" v-show="store.state.user_token !== null">
+          <img class="add-to-cart__img" src="../assets/корзина.svg" alt="Cart">В корзину
+        </button>
       </div>
     </div>
-  </template>
-  
-  <script>
-  
-  import store from "@/store";
-  
-  export default {
-    computed: {
-      store() {
-        return store
+
+<div class="pagination">
+  <button @click="changePage('prev')" :disabled="currentPage === 1">Предыдущая</button>
+  <span>{{ currentPage }} из {{ totalPages }}</span>
+  <button @click="changePage('next')" :disabled="currentPage === totalPages">Следующая</button>
+</div>
+  </div>
+</template>
+
+<script>
+import store from "@/store";
+
+export default {
+  computed: {
+    store() {
+      return store;
+    },
+    displayedProducts() {
+      const start = (this.currentPage - 1) * 16;
+      const end = start + 16;
+      return this.store.state.products.data.slice(start, end) || [];
+    },
+    totalPages() {
+      return Math.ceil((this.store.state.products.data || []).length / 16);
+    },
+  },
+  data() {
+    return {
+      currentPage: 1,
+    };
+  },
+  methods: {
+    
+    changePage(action) {
+      if (action === 'prev' && this.currentPage > 1) {
+        this.currentPage--;
+      } else if (action === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
       }
     },
-    mounted(){
-      if (localStorage.token !== undefined && localStorage.token !== null) {
-        store.state.user_token = localStorage.token;
-      }
-      this.$store.commit('fetchProducts');
-    },
-  }
-  
-  </script>
+
+      getPageRange() {
+    const total = this.totalPages;
+    const current = this.currentPage;
+    const rangeStart = Math.max(1, current - 2);
+    const rangeEnd = Math.min(total, rangeStart + 4);
+
+    return `${rangeStart}-${rangeEnd} из ${total}`;
+  },
+  },
+  mounted() {
+    if (localStorage.token !== undefined && localStorage.token !== null) {
+      store.state.user_token = localStorage.token;
+    }
+    this.$store.commit('fetchProducts');
+  },
+};
+</script>
   
   <style scoped>
   .products {
@@ -144,6 +182,29 @@ nav {
 
 .add-to-cart__img {
   width: 25px;
+}
+
+.pagination {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.pagination span{
+  color: #252525;
+}
+
+.pagination button {
+    cursor: pointer;
+    border: none;
+    background-color: rgb(79, 123, 206);
+    color: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    font-weight: 600;
+    box-shadow: 3px 3px 3px 1px #d1d1d1;
 }
 
   </style>
