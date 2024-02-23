@@ -1,6 +1,6 @@
 import index, { createStore } from 'vuex'
 import axios from "axios";
-
+import { router } from "@/router";
 export default createStore({
   state: {
     products: [],
@@ -49,11 +49,14 @@ export default createStore({
       let indexCart = state.realCart.indexOf(product);
       state.realCart.splice(indexCart, 1);
     },
-    orderCreate(state){
-      let newOrders = state.realCart.map(item => ({...item}));
+    orderCreate(state) {
+      let newOrders = state.realCart.map((item) => ({ ...item }));
       state.orders.push(newOrders);
       state.realCart.splice(0, state.realCart.length);
       console.log(state.orders);
+
+      
+      router.push({ name: "order" });
     },
     async fetchProducts(state){
       const {data} = await axios.get('https://jurapro.bhuser.ru/api-shop/products')
@@ -61,7 +64,7 @@ export default createStore({
           .catch(error =>{console.log(error)})
       state.products = data;
 
-      // console.log(data);
+      
     },
     async login(state){
 

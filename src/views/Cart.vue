@@ -72,7 +72,7 @@
     background-color: rgb(79, 123, 206);
     border-radius: 5px;
     padding: 20px;
-    height: 400px;
+    height: 420px;
     max-width: 241px;
     display: flex;
     justify-content: center;

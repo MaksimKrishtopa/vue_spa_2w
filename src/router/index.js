@@ -5,7 +5,7 @@ const routes = [
     path: '/',
     name: 'products',
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Products.vue');
+      return import( '../views/Products.vue');
     }
   },
 
@@ -13,14 +13,14 @@ const routes = [
     path: '/login',
     name: 'login',
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/LogIn.vue')
+      return import( '../views/LogIn.vue')
     }
   },
   {
     path: '/registration',
     name: 'registration', 
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Reg.vue')
+      return import( '../views/Reg.vue')
     }
   },
 
@@ -28,7 +28,7 @@ const routes = [
     path: '/cart',
     name: 'cart',
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Cart.vue')
+      return import( '../views/Cart.vue')
     }
   },
 
@@ -36,14 +36,15 @@ const routes = [
     path: '/order',
     name: 'order',
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Orders.vue')
+      return import( '../views/Orders.vue')
     }
   },
 ]  
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export { router };  
+export default router;
